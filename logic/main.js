@@ -11,6 +11,8 @@ const copyBtn = document.getElementById("copyBtn");
 const summaryText = document.getElementById("summaryText");
 const recordingIndicator = document.getElementById("recordingIndicator");
 const recordingsContainer = document.getElementById("recordingsContainer");
+const recordingsSection = document.getElementById("recordingsSection");
+
 //Audio transcriber Model Choices
 const modelSelect = document.getElementById("modelSelect");
 //Summarize Select Model Choices
@@ -122,6 +124,7 @@ stopBtn.addEventListener("click", async () => {
     audioCard.appendChild(audioEl);
     audioCard.appendChild(modelLabel);
     colDiv.appendChild(audioCard);
+    recordingsSection.classList.remove("d-none");
     recordingsContainer.prepend(colDiv);
 
     try {
@@ -152,7 +155,9 @@ uploadInput.addEventListener("change", (e) => {
     const url = URL.createObjectURL(file);
     audioPlayer.src = url;
     audioPreview.classList.remove("d-none");
-  } else {
+     if(!recordingsSection.classList.contains("d-none")){
+      recordingsSection.classList.add("d-none");
+    }
     startBtn.disabled = false;
   }
 });
@@ -165,7 +170,7 @@ processUploadBtn.addEventListener("click", async () => {
   }
 
   const file = uploadInput.files[0];
-  Notiflix.Loading.circle("Processing uploaded audio...");
+    Notiflix.Notify.info("Processing uploaded  audio...");
 
   try {
     // Step 1: Transcribe
