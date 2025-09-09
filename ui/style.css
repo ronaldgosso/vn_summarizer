@@ -1,74 +1,11 @@
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background-color: #0F172A; /* Dark Navy */
-  color: #E2E8F0; /* Light gray text */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
+/* Colors */
+.text-cyan { color: #22D3EE; }
+.btn-cyan { background-color: #22D3EE; color: #0F172A; }
+.btn-cyan:hover { background-color: #0ea5e9; color: #fff; }
 
-.container {
-  max-width: 600px;
-  padding: 2rem;
-  text-align: center;
-}
+body { background-color: #0F172A; }
 
-.title {
-  color: #22D3EE; /* Neon Cyan */
-  font-size: 1.8rem;
-  margin-bottom: 2rem;
-}
-
-.recorder button {
-  background-color: #22D3EE;
-  border: none;
-  color: #0F172A;
-  font-weight: bold;
-  padding: 0.8rem 1.2rem;
-  margin: 0.5rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.recorder button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.recorder button:hover:enabled {
-  background-color: #0ea5e9;
-  color: white;
-}
-
-.output {
-  margin-top: 2rem;
-}
-
-.card {
-  background-color: #1E293B; /* Dark gray-blue */
-  border: 1px solid #64748B; /* Cool Gray */
-  border-radius: 0.8rem;
-  padding: 1.5rem;
-  text-align: left;
-}
-
-#copyBtn {
-  margin-top: 1rem;
-  background-color: #64748B;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.4rem;
-  cursor: pointer;
-}
-
-#copyBtn:hover {
-  background-color: #475569;
-}
-
+/* Recording Dot */
 .recording-dot {
   display: inline-block;
   width: 12px;
@@ -76,7 +13,7 @@ body {
   margin-left: 10px;
   border-radius: 50%;
   background-color: red;
-  visibility: hidden;
+  visibility: hidden; /* hidden by default */
   animation: blink 1s infinite;
   vertical-align: middle;
 }
@@ -84,4 +21,17 @@ body {
 @keyframes blink {
   0%, 50%, 100% { opacity: 1; }
   25%, 75% { opacity: 0; }
+}
+
+/* Audio card inside grid */
+.audio-card {
+  background-color: #1E293B;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.audio-card audio {
+  width: 100%;
 }
