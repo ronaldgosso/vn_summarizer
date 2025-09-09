@@ -4,9 +4,17 @@ const copyBtn = document.getElementById('copyBtn');
 const summaryText = document.getElementById('summaryText');
 const recordingIndicator = document.getElementById('recordingIndicator');
 const recordingsContainer = document.getElementById('recordingsContainer');
+const modelSelect = document.getElementById('modelSelect');
 
 let mediaRecorder;
 let audioChunks = [];
+let chosenModel = modelSelect.value;
+
+// Update chosen model dynamically
+modelSelect.addEventListener('change', () => {
+  chosenModel = modelSelect.value;
+  Notiflix.Notify.info(`${modelSelect.options[modelSelect.selectedIndex].text} selected`);
+});
 
 // Start Recording
 startBtn.addEventListener('click', async () => {
@@ -24,6 +32,7 @@ startBtn.addEventListener('click', async () => {
       recordingIndicator.style.visibility = 'visible';
       startBtn.disabled = true;
       stopBtn.disabled = false;
+      Notiflix.Notify.info(`Recording started using ${modelSelect.options[modelSelect.selectedIndex].text}`);
     };
 
     mediaRecorder.start();
@@ -46,7 +55,7 @@ stopBtn.addEventListener('click', () => {
     const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
     const audioUrl = URL.createObjectURL(audioBlob);
 
-    // Create a responsive audio card
+    // Create responsive audio card
     const colDiv = document.createElement('div');
     colDiv.className = 'col-12 col-sm-6 col-md-4 col-lg-3';
 
@@ -57,7 +66,13 @@ stopBtn.addEventListener('click', () => {
     audioEl.controls = true;
     audioEl.src = audioUrl;
 
+    // Display chosen model for this recording
+    const modelLabel = document.createElement('small');
+    modelLabel.className = 'text-muted mt-1';
+    modelLabel.textContent = `Model: ${modelSelect.options[modelSelect.selectedIndex].text}`;
+
     audioCard.appendChild(audioEl);
+    audioCard.appendChild(modelLabel);
     colDiv.appendChild(audioCard);
     recordingsContainer.prepend(colDiv); // newest first
 
@@ -68,7 +83,7 @@ stopBtn.addEventListener('click', () => {
 // Fake Summary
 function fakeSummary() {
   setTimeout(() => {
-    summaryText.textContent = "This is the fake summary. The real summary will come after Whisper transcription + T5 summarization.";
+    summaryText.textContent = `This is a fake summary generated using "${modelSelect.options[modelSelect.selectedIndex].text}".`;
     Notiflix.Notify.success('Summary ready!');
   }, 1000);
 }
