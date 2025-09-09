@@ -51,13 +51,15 @@
       </div>
 
       <div class="mb-4 text-center">
-        <label for="summarizerSelect" class="form-label">Summarizer:</label>
+        <label for="summarizerSelect" class="form-label"
+          >Choose Summarizer:</label
+        >
         <select id="summarizerSelect" class="form-select w-auto d-inline-block">
-          <option value="fast">
+          <option value="fast" selected>
             Fast
             <!-- T5 -->
           </option>
-          <option value="accurate" selected>
+          <option value="accurate">
             Accurate
             <!-- Xenova/distilbart-cnn-6-6 (Accurate, Multilingual) -->
           </option>
@@ -66,11 +68,40 @@
 
       <!-- Recorder Controls -->
       <div class="recorder mb-4 text-center">
+        <p>
+          <label for="summarizerSelect" class="form-label"
+            >Record from your Browser or Upload a file</label
+          >
+        </p>
         <button id="startBtn" class="btn btn-cyan me-2">
           🎙️ Start Recording
         </button>
         <button id="stopBtn" class="btn btn-secondary" disabled>⏹️ Stop</button>
         <span id="recordingIndicator" class="recording-dot"></span>
+      </div>
+      <!-- Recording / Upload Controls -->
+      <div class="card shadow-lg p-4 mb-4">
+        <div
+          class="d-flex flex-column flex-md-row gap-3 justify-content-center"
+        >
+          <!-- Upload -->
+          <input
+            type="file"
+            id="uploadInput"
+            accept="audio/wav, audio/mpeg, audio/mp3, audio/webm"
+            class="form-control"
+            style="max-width: 280px"
+          />
+        </div>
+      </div>
+
+      <!-- Audio Preview -->
+      <div id="audioPreview" class="mb-4 text-center d-none">
+        <h5 class="mb-3">Your Audio</h5>
+        <audio id="audioPlayer" controls class="custom-audio-player"></audio>
+        <button id="processUploadBtn" class="btn btn-cyan mt-3">
+          Process Audio
+        </button>
       </div>
 
       <!-- Summary Card -->
@@ -85,7 +116,7 @@
       </div>
 
       <!-- Recordings Grid -->
-      <div>
+      <div id="recordingsSection" class="d-none">
         <h2>Previous Recordings</h2>
         <div id="recordingsContainer" class="row g-3"></div>
       </div>

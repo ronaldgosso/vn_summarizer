@@ -2,7 +2,7 @@ import {
   transcribeAudio,
   summarizeText,
   preloadWhisperModels,
-  preloadSummarizerModels
+  preloadSummarizerModels,
 } from "./models.js";
 
 const startBtn = document.getElementById("startBtn");
@@ -11,17 +11,33 @@ const copyBtn = document.getElementById("copyBtn");
 const summaryText = document.getElementById("summaryText");
 const recordingIndicator = document.getElementById("recordingIndicator");
 const recordingsContainer = document.getElementById("recordingsContainer");
+//Audio transcriber Model Choices
 const modelSelect = document.getElementById("modelSelect");
+//Summarize Select Model Choices
+const summarizeSelect = document.getElementById("summarizerSelect");
+const uploadInput = document.getElementById("uploadInput");
+const audioPreview = document.getElementById("audioPreview");
+const audioPlayer = document.getElementById("audioPlayer");
+const processUploadBtn = document.getElementById("processUploadBtn");
 
 let mediaRecorder;
 let audioChunks = [];
 let chosenModel = modelSelect.value;
+let sumaryModel = summarizeSelect.value;
 
-// Update chosen model dynamically
+// Update chosen audio model dynamically
 modelSelect.addEventListener("change", async () => {
   chosenModel = modelSelect.value;
   Notiflix.Notify.info(
     `${modelSelect.options[modelSelect.selectedIndex].text} selected`
+  );
+});
+
+// Update chosen summarize model dynamically
+summarizeSelect.addEventListener("change", async () => {
+  sumaryModel = summarizeSelect.value;
+  Notiflix.Notify.info(
+    `${summarizeSelect.options[summarizeSelect.selectedIndex].text} selected`
   );
 });
 
@@ -41,6 +57,7 @@ window.addEventListener("load", async () => {
 
 // Start Recording
 startBtn.addEventListener("click", async () => {
+  uploadInput.disabled = true;
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     mediaRecorder = new MediaRecorder(stream);
@@ -64,6 +81,7 @@ startBtn.addEventListener("click", async () => {
 
     mediaRecorder.start();
   } catch (error) {
+    uploadInput.disabled = false;
     Notiflix.Notify.failure("Microphone access denied!");
     console.error(error);
   }
@@ -77,6 +95,8 @@ stopBtn.addEventListener("click", async () => {
   recordingIndicator.style.visibility = "hidden";
   startBtn.disabled = false;
   stopBtn.disabled = true;
+
+  uploadInput.disabled = false;
 
   mediaRecorder.onstop = async () => {
     const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
@@ -109,7 +129,7 @@ stopBtn.addEventListener("click", async () => {
       const transcription = await transcribeAudio(audioBlob, chosenModel);
 
       Notiflix.Notify.info("Summarizing transcription...");
-      const summary = await summarizeText(transcription);
+      const summary = await summarizeText(transcription, sumaryModel);
 
       summaryText.textContent = summary;
       Notiflix.Notify.success("Summary ready!");
@@ -117,8 +137,52 @@ stopBtn.addEventListener("click", async () => {
       console.error(err);
       summaryText.textContent = "Error transcribing/summarizing audio.";
       Notiflix.Notify.failure("Failed to process audio.");
+    } finally {
+      Notiflix.Loading.remove();
     }
   };
+});
+
+// Disable recording if file is chosen
+uploadInput.addEventListener("change", (e) => {
+  if (e.target.files.length > 0) {
+    startBtn.disabled = true;
+    stopBtn.disabled = true;
+    const file = e.target.files[0];
+    const url = URL.createObjectURL(file);
+    audioPlayer.src = url;
+    audioPreview.classList.remove("d-none");
+  } else {
+    startBtn.disabled = false;
+  }
+});
+
+// --- Process Uploaded File ---
+processUploadBtn.addEventListener("click", async () => {
+  if (!uploadInput.files.length) {
+    Notiflix.Notify.failure("No audio file selected!");
+    return;
+  }
+
+  const file = uploadInput.files[0];
+  Notiflix.Loading.circle("Processing uploaded audio...");
+
+  try {
+    // Step 1: Transcribe
+    const transcription = await transcribeAudio(file, chosenModel);
+
+    // Step 2: Summarize
+    const summary = await summarizeText(transcription, sumaryModel);
+    summaryText.textContent = summary;
+
+    // results.classList.remove("d-none");
+    Notiflix.Notify.success("Audio processed successfully!");
+  } catch (err) {
+    console.error(err);
+    Notiflix.Notify.failure("Error processing uploaded audio.");
+  } finally {
+    Notiflix.Loading.remove();
+  }
 });
 
 // Copy to Clipboard
