@@ -1,64 +1,39 @@
-/* Colors */
-.text-cyan { color: #22D3EE; }
-.btn-cyan { background-color: #22D3EE; color: #0F172A; }
-.btn-cyan:hover { background-color: #0ea5e9; color: #fff; }
+/* Buttons */
+.btn-cyan {
+  background-color: #00bcd4;
+  color: white;
+  border: none;
+}
+.btn-cyan:hover {
+  background-color: #0097a7;
+}
 
-body { background-color: #0F172A; }
-
-/* Recording Dot */
+/* Recording Indicator */
 .recording-dot {
   display: inline-block;
   width: 12px;
   height: 12px;
-  margin-left: 10px;
+  margin-left: 8px;
   border-radius: 50%;
   background-color: red;
-  visibility: hidden; /* hidden by default */
   animation: blink 1s infinite;
-  vertical-align: middle;
 }
-
 @keyframes blink {
-  0%, 50%, 100% { opacity: 1; }
-  25%, 75% { opacity: 0; }
+  50% {
+    opacity: 0;
+  }
 }
 
-/* Audio card inside grid */
-.audio-card {
-  background-color: #1E293B;
-  border-radius: 0.5rem;
-  padding: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.audio-card audio {
-  width: 100%;
-}
-
-body {
-  background-color: #0f172a;
-  color: #e2e8f0;
-}
-
-.btn-cyan {
-  background-color: #22d3ee;
-  color: #0f172a;
-  font-weight: 600;
-}
-
-.btn-cyan:hover {
-  background-color: #0ea5e9;
-  color: white;
-}
-
-/* Modern audio player */
+/* Audio Player */
 .custom-audio-player {
   width: 100%;
-  max-width: 500px;
+  max-width: 450px;
   border-radius: 12px;
-  outline: none;
-  background: linear-gradient(90deg, #22d3ee, #0ea5e9);
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  background: #212529;
+  padding: 6px;
 }
 
+/* Summary text always visible */
+#summaryText {
+  color: #f8f9fa !important;
+}

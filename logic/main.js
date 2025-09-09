@@ -60,6 +60,7 @@ window.addEventListener("load", async () => {
 // Start Recording
 startBtn.addEventListener("click", async () => {
   uploadInput.disabled = true;
+  recordingIndicator.classList.remove("d-none"); 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     mediaRecorder = new MediaRecorder(stream);
@@ -71,7 +72,6 @@ startBtn.addEventListener("click", async () => {
     };
 
     mediaRecorder.onstart = () => {
-      recordingIndicator.style.visibility = "visible";
       startBtn.disabled = true;
       stopBtn.disabled = false;
       Notiflix.Notify.info(
@@ -94,7 +94,7 @@ stopBtn.addEventListener("click", async () => {
   if (!mediaRecorder) return;
 
   mediaRecorder.stop();
-  recordingIndicator.style.visibility = "hidden";
+  recordingIndicator.classList.add("d-none"); 
   startBtn.disabled = false;
   stopBtn.disabled = true;
 
