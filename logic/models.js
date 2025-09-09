@@ -2,38 +2,41 @@
 // Whisper + T5 summarization
 import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.2/dist/transformers.min.js";
 
-let whisperModel = null;
+export const whisperModels = {};
 let summarizerModel = null;
 
 /**
- * Load Whisper model dynamically based on chosenModel
- * @param {string} modelKey - 'fast', 'balanced', 'accurate'
+ * Preload all Whisper models in background
  */
-export async function loadWhisperModel(modelKey) {
-  let modelName;
+export async function preloadWhisperModels() {
+  const modelMap = {
+    fast: "Xenova/whisper-tiny",
+    balanced: "Xenova/whisper-base",
+    accurate: "Xenova/whisper-small",
+  };
 
-  switch (modelKey) {
-    case "fast":
-      modelName = "Xenova/whisper-tiny";
-      break;
-    case "balanced":
-      modelName = "Xenova/whisper-base";
-      break;
-    case "accurate":
-      modelName = "Xenova/whisper-small";
-      break;
-    default:
-      modelName = "Xenova/whisper-tiny";
+  for (const key in modelMap) {
+    if (!whisperModels[key]) {
+      Notiflix.Notify.info(`Preloading ${key} Whisper model...`);
+      whisperModels[key] = await pipeline(
+        "automatic-speech-recognition",
+        modelMap[key],
+         {
+          chunk_length_s: 30,   // chunk size for long audios
+          stride_length_s: 5    // overlap for continuity
+        }
+      );
+      Notiflix.Notify.success(`${key} Whisper model preloaded!`);
+    }
   }
+}
 
-  // Show loading notification
-  Notiflix.Notify.info(`Loading ${modelKey} Whisper model...`);
-
-  // Load Whisper using transformers.js
-  whisperModel = await pipeline("automatic-speech-recognition", modelName);
-
-  Notiflix.Notify.success(`${modelKey} Whisper model loaded!`);
-  return whisperModel;
+/**
+ * Get Whisper model (preloaded or fallback)
+ */
+export function getWhisperModel(key) {
+  if (!whisperModels[key]) throw new Error(`${key} Whisper model not loaded`);
+  return whisperModels[key];
 }
 
 /**
@@ -53,10 +56,10 @@ export async function loadSummarizer() {
  * @param {Blob} audioBlob
  * @returns {string} transcription
  */
-export async function transcribeAudio(audioBlob) {
-  if (!whisperModel) throw new Error("Whisper model not loaded");
+export async function transcribeAudio(audioBlob,modelKey) {
+  const model = getWhisperModel(modelKey);
   const floatData = await blobToFloat32Array(audioBlob);
-  const transcription = await whisperModel(floatData);
+  const transcription = await model(floatData);
   return transcription.text;
 }
 

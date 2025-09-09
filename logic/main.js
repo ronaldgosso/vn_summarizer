@@ -1,8 +1,8 @@
 import {
-  loadWhisperModel,
   transcribeAudio,
   summarizeText,
-  blobToFloat32Array,
+  preloadWhisperModels,
+  loadSummarizer,
 } from "./models.js";
 
 const startBtn = document.getElementById("startBtn");
@@ -16,7 +16,6 @@ const modelSelect = document.getElementById("modelSelect");
 let mediaRecorder;
 let audioChunks = [];
 let chosenModel = modelSelect.value;
-let whisperLoaded = false;
 
 // Update chosen model dynamically
 modelSelect.addEventListener("change", async () => {
@@ -24,7 +23,20 @@ modelSelect.addEventListener("change", async () => {
   Notiflix.Notify.info(
     `${modelSelect.options[modelSelect.selectedIndex].text} selected`
   );
-  whisperLoaded = false; // force reload model on next recording
+});
+
+// Preload models on page load
+window.addEventListener("load", async () => {
+  try {
+    Notiflix.Loading.dots("Preloading AI models...");
+    await Promise.all([preloadWhisperModels(), loadSummarizer()]);
+    Notiflix.Loading.remove();
+    Notiflix.Notify.success("All models preloaded! Ready to record.");
+  } catch (err) {
+    console.error(err);
+    Notiflix.Loading.remove();
+    Notiflix.Notify.failure("Failed to preload models.");
+  }
 });
 
 // Start Recording
@@ -93,13 +105,8 @@ stopBtn.addEventListener("click", async () => {
     recordingsContainer.prepend(colDiv);
 
     try {
-      if (!whisperLoaded) {
-        await loadWhisperModel(chosenModel);
-        whisperLoaded = true;
-      }
-
       Notiflix.Notify.info("Transcribing audio...");
-      const transcription = await transcribeAudio(audioBlob);
+      const transcription = await transcribeAudio(audioBlob, chosenModel);
 
       Notiflix.Notify.info("Summarizing transcription...");
       const summary = await summarizeText(transcription);
