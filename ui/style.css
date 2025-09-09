@@ -1,0 +1,87 @@
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #0F172A; /* Dark Navy */
+  color: #E2E8F0; /* Light gray text */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  max-width: 600px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.title {
+  color: #22D3EE; /* Neon Cyan */
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+}
+
+.recorder button {
+  background-color: #22D3EE;
+  border: none;
+  color: #0F172A;
+  font-weight: bold;
+  padding: 0.8rem 1.2rem;
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.recorder button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.recorder button:hover:enabled {
+  background-color: #0ea5e9;
+  color: white;
+}
+
+.output {
+  margin-top: 2rem;
+}
+
+.card {
+  background-color: #1E293B; /* Dark gray-blue */
+  border: 1px solid #64748B; /* Cool Gray */
+  border-radius: 0.8rem;
+  padding: 1.5rem;
+  text-align: left;
+}
+
+#copyBtn {
+  margin-top: 1rem;
+  background-color: #64748B;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+#copyBtn:hover {
+  background-color: #475569;
+}
+
+.recording-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 10px;
+  border-radius: 50%;
+  background-color: red;
+  visibility: hidden;
+  animation: blink 1s infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Voice Notes → Summarizer</title>
+  <link rel="stylesheet" href="ui/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notiflix/dist/notiflix-3.2.6.min.css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Voice Notes → Summarizer</h1>
+
+    <!-- Recorder Controls -->
+    <div class="recorder">
+      <button id="startBtn">🎙️ Start Recording</button>
+      <button id="stopBtn" disabled>⏹️ Stop</button>
+      <span id="recordingIndicator" class="recording-dot"></span>
+    </div>
+
+    <!-- Transcription and Summary -->
+    <div class="output">
+      <h2>Summary</h2>
+      <div id="summaryCard" class="card">
+        <p id="summaryText">Your summary will appear here...</p>
+        <button id="copyBtn">📋 Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/notiflix"></script>
+  <script src="logic/main.js"></script>
+</body>
+</html>
