@@ -2,7 +2,7 @@ import {
   transcribeAudio,
   summarizeText,
   preloadWhisperModels,
-  loadSummarizer,
+  preloadSummarizerModels
 } from "./models.js";
 
 const startBtn = document.getElementById("startBtn");
@@ -29,7 +29,7 @@ modelSelect.addEventListener("change", async () => {
 window.addEventListener("load", async () => {
   try {
     Notiflix.Loading.dots("Preloading AI models...");
-    await Promise.all([preloadWhisperModels(), loadSummarizer()]);
+    await Promise.all([preloadWhisperModels(), preloadSummarizerModels()]);
     Notiflix.Loading.remove();
     Notiflix.Notify.success("All models preloaded! Ready to record.");
   } catch (err) {

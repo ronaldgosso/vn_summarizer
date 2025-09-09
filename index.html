@@ -14,7 +14,11 @@
 
     <!-- Xenova Transformers.js (browser build) -->
     <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0/dist/transformers.umd.js"></script>
-
+    <!-- Google MT5 -->
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@xenova/transformers"
+    ></script>
     <!-- Notiflix -->
     <link
       rel="stylesheet"
@@ -27,19 +31,35 @@
 
       <!-- Model Selector -->
       <div class="mb-4 text-center">
-        <label for="modelSelect" class="form-label">Choose Model:</label>
+        <label for="modelSelect" class="form-label"
+          >Choose Audio Transcriber:</label
+        >
         <select id="modelSelect" class="form-select w-auto d-inline-block">
           <option value="fast" selected>
-            Fast Model
+            Fast
             <!-- (Whisper Tiny / Vosk Small) -->
           </option>
           <option value="balanced">
-            Balanced Model
+            Balanced
             <!-- (Whisper Base / Vosk Medium) -->
           </option>
           <option value="accurate">
-            Accurate Model
+            Accurate
             <!-- (Whisper Small / Medium) -->
+          </option>
+        </select>
+      </div>
+
+      <div class="mb-4 text-center">
+        <label for="summarizerSelect" class="form-label">Summarizer:</label>
+        <select id="summarizerSelect" class="form-select w-auto d-inline-block">
+          <option value="fast">
+            Fast
+            <!-- T5 -->
+          </option>
+          <option value="accurate" selected>
+            Accurate
+            <!-- Xenova/distilbart-cnn-6-6 (Accurate, Multilingual) -->
           </option>
         </select>
       </div>
