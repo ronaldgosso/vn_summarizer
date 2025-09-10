@@ -44,7 +44,7 @@ summarizeSelect.addEventListener("change", async () => {
 });
 
 // Preload models on page load
-window.addEventListener("lod", async () => {
+window.addEventListener("load", async () => {
   try {
     Notiflix.Loading.dots("Preloading AI models...");
     await Promise.all([preloadWhisperModels(), preloadSummarizerModels()]);
