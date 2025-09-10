@@ -1,0 +1,40 @@
+stages:
+  - deploy
+  - notify
+
+pages:
+  stage: deploy
+  script:
+    - mkdir .public
+    - cp -r * .public
+    - mv .public public
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      changes:
+        - "ui/**"  
+        - "index.html" 
+        - "logic/**"
+      when: on_success
+    - when: never
+
+notify_success:
+  stage: notify
+  script: >
+    curl -X POST -H "Content-Type: application/json" -d '{"branch": "'"$CI_COMMIT_BRANCH"'","message":"GitLab CI/CD deployed!"}' https://eoiokktma8m4ley.m.pipedream.net
+  when: on_success
+
+notify_failure:
+  stage: notify
+  script: >
+    curl -X POST -H "Content-Type: application/json" -d '{
+      "branch": "'"$CI_COMMIT_BRANCH"'",
+      "commit": "'"$CI_COMMIT_SHA"'",
+      "project": "'"$CI_PROJECT_NAME"'",
+      "status": "failure",
+      "pipeline_url": "'"$CI_PIPELINE_URL"'",
+      "message": "Deployment failed in job '"$CI_JOB_NAME"'."
+    }' https://eoiokktma8m4ley.m.pipedream.net
+  when: on_failure
