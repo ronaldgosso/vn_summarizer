@@ -43,7 +43,7 @@ summarizeSelect.addEventListener("change", async () => {
   );
 });
 
-// Preload models on page load
+// Preload models on page load. 
 window.addEventListener("load", async () => {
   try {
     Notiflix.Loading.dots("Preloading AI models...");
