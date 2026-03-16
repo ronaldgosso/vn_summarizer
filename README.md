@@ -125,7 +125,7 @@ If your browser supports ES Modules (all modern browsers do), you can simply:
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/voice-notes-summarizer.git
+git clone https://github.com/ronaldgosso/vn_summarizer.git
 cd voice-notes-summarizer
 
 # Open in browser
